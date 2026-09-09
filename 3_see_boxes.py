@@ -1,19 +1,21 @@
 import os
+import shutil
 import cv2
 
 # Paths to your dataset files
 IMAGE_DIR = "mall_dataset/train/images"
 LABEL_DIR = "mall_dataset/train/labels"
 OUTPUT_DIR = "annotated_visuals"
+
+# CRITICAL FIX: Delete the old folder completely so old images disappear!
+if os.path.exists(OUTPUT_DIR):
+    shutil.rmtree(OUTPUT_DIR)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Map class numbers to names
-CLASS_MAP = {0: "Person", 24: "Backpack", 26: "Handbag", 28: "Suitcase"}
-
-# Get ALL the images in the directory (removed the [:5] limit)
+# Get ALL the images in the directory
 image_files = sorted([f for f in os.listdir(IMAGE_DIR) if f.endswith(".jpg")])
 
-print(f"Generating annotated boxes for all {len(image_files)} images...")
+print(f"Generating clean, STRICT person-only boxes for {len(image_files)} images...")
 
 for img_name in image_files:
     img_path = os.path.join(IMAGE_DIR, img_name)
@@ -32,6 +34,11 @@ for img_name in image_files:
                 continue
                 
             cls_id = int(parts[0])
+            
+            # CRITICAL FILTER: Skip drawing if it is NOT a person (Class 0)
+            if cls_id != 0:
+                continue
+                
             x_center, y_center, box_w, box_h = map(float, parts[1:])
             
             # Convert math coordinates to image pixel locations
@@ -40,12 +47,11 @@ for img_name in image_files:
             x2 = int((x_center + box_w / 2) * w)
             y2 = int((y_center + box_h / 2) * h)
             
-            # Draw green box and text label on the frame
+            # Draw green box and write "Person"
             cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            label_text = CLASS_MAP.get(cls_id, f"ID: {cls_id}")
-            cv2.putText(img, label_text, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+            cv2.putText(img, "Person", (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
             
     # Save into your visual folder
     cv2.imwrite(os.path.join(OUTPUT_DIR, f"visual_{img_name}"), img)
 
-print(f"Done! Check the '{OUTPUT_DIR}' folder to see all your images.")
+print(f"Done! Check the '{OUTPUT_DIR}' folder. Handbags and backpacks are now completely hidden!")

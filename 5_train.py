@@ -1,14 +1,17 @@
 from ultralytics import YOLO
 
-print("Loading lightweight YOLOv11 Nano model...")
-model = YOLO("yolo11n.pt")
+print("🚀 Activating NVIDIA Blackwell RTX 5070 Pipeline...")
+# We can now confidently train the higher-accuracy Small model!
+model = YOLO("yolo11s.pt") 
 
-print("Starting custom training pipeline...")
+print("🔥 Launching GPU-Accelerated Training...")
 model.train(
     data="dataset.yaml", 
-    epochs=25,         # 25 loops is perfect for a great school presentation
-    imgsz=640,         # Standard input size
-    device="cpu"       # Uses your computer processor
+    epochs=50,          # Boosted to 50 epochs for outstanding professional accuracy
+    imgsz=640,          # Full standard 640x640 resolution for crisp detail detection
+    batch=16,           # Processes 16 images at once effortlessly using GPU memory
+    device=0,           # CRITICAL: Forces YOLO to use CUDA on your Nvidia 5070 GPU
+    workers=4           # Speeds up image loading using multi-threading
 )
 
-print("Training finished! Check 'runs/detect/train/' for your final results!")
+print("🎉 Training completed seamlessly on your RTX 5070!")

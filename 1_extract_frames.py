@@ -42,4 +42,4 @@ while True:
         cv2.imwrite(f"{OUTPUT_DIR}/frame_{saved_count:05d}.jpg", frame)
 
 cap.release()
-print(f"Finished! Saved {saved_count} unique images into '{OUTPUT_DIR}'.")
+print(f"Finished!6_export_coordinates.py Saved {saved_count} unique images into '{OUTPUT_DIR}'.")
