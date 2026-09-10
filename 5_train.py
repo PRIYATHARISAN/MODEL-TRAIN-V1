@@ -1,10 +1,10 @@
 from ultralytics import YOLO
 
-print("🚀 Activating NVIDIA Blackwell RTX 5070 Pipeline...")
+print("Activating NVIDIA Blackwell RTX 5070 Pipeline...")
 # We can now confidently train the higher-accuracy Small model!
 model = YOLO("yolo11s.pt") 
 
-print("🔥 Launching GPU-Accelerated Training...")
+print(" Launching GPU-Accelerated Training...")
 model.train(
     data="dataset.yaml", 
     epochs=50,          # Boosted to 50 epochs for outstanding professional accuracy
@@ -14,4 +14,4 @@ model.train(
     workers=4           # Speeds up image loading using multi-threading
 )
 
-print("🎉 Training completed seamlessly on your RTX 5070!")
+print("Training completed seamlessly on your RTX 5070!")
